@@ -1,0 +1,10 @@
+{
+    "name": "Serverless-api",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot"
+            ]
+        }
+    }
+}
