@@ -1,18 +1,37 @@
 service: serverless
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: nodejs20.x
+  timeout: 30
   environment:
     DATABASE_URL: ${env:DATABASE_URL,"test"}
+  iam:
+   role:
+    name: serverless-my-ssm-role
+    statements:
+      - Effect: 'Allow'
+        Resource: '*'
+        Action:
+          - "ssm:GetParameter"
+          - "ssm:GetParameters"
+          - "ssm:GetParametersByPath"
+          - "ssm:GetParameterHistory"
+          - "ssm:DescribeParameters"
 
 functions:
   api:
-    handler: index.handler
+    handler: ./src/index.handler
     events:
-      - httpApi: '*'
+      - httpApi: "*"
 
+custom:
+  dotenv:
+    exclude:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DATABASE_URL
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
